@@ -145,3 +145,50 @@ button, a, select, input { -webkit-tap-highlight-color: transparent; }
   .site-module-card, .topbar .top-actions :is(button, a) { transition: none; }
   .site-module-card:hover { transform: none; }
 }
+/* Direct project links share the existing control styles. */
+.top-actions .absorbevo-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 32px;
+  padding: 0 11px;
+  font-size: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid #ffb56540;
+  background: #0b1c22ad;
+  cursor: pointer;
+  transition: border-color .16s, color .16s, background .16s;
+}
+.interface-block > .absorbevo-bridge-button {
+  width: 100%;
+  min-height: 31px;
+  border: 1px solid #ffb86f4d;
+  border-radius: 2px;
+  font-size: 11px;
+  transition: border-color .16s, color .16s, background .16s;
+}
+.absorbevo-intro-action,
+.absorbevo-bridge-button,
+.project-absorbevo-feature > a {
+  text-decoration: none;
+}
+.project-absorbevo-feature > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 0 13px;
+  color: #ffd2a1;
+  background: #5d351852;
+  border: 1px solid #ffc17f59;
+  font-size: 12px;
+  white-space: nowrap;
+}
+@media (max-width: 940px) {
+  .project-absorbevo-feature > a { grid-column: 2; justify-self: start; }
+}
+@media (max-width: 680px) {
+  .project-absorbevo-feature > a { grid-column: 1; justify-content: center; width: 100%; }
+}

@@ -1,30 +1,16 @@
-/**
- * 极简 PNG → WebP 转换工具（无外部依赖，纯 Node 内置模块）
- *
- * 用途：将参考/示意图压缩为 WebP，便于网页使用。
- * 说明：实现 baseline 顺序式 DCT、质量量化和 VP8L 风格是无复杂依赖下
- * 不现实的；因此本工具采用「PNG 解码 → 以 image/webp 为目标的备选路径」。
- *
- * 由于纯 Node 无法编码 WebP，本工具实际执行：
- *   1) 解码 PNG（支持 8-bit RGB/RGBA）
- *   2) 可选缩放（最近邻，限制最长边）
- *   3) 输出仍为 PNG（保持兼容），并打印建议：
- *      生产环境请用 `cwebp input.png -q 82 -o output.webp` 获得更优体积。
- *
- * 运行：node repair-workflow/tools/png-to-webp.mjs <in.png> [maxWidth]
- */
+/* Deterministic synthetic inspection data. Run with node repair-workflow/tools/generate-demo-data.mjs. */
 import { readFileSync, writeFileSync } from "node:fs";
 import { inflateSync } from "node:zlib";
 import { deflateSync } from "node:zlib";
 
 const [,, inPath, maxWArg] = process.argv;
 if (!inPath) {
-  console.error("用法: node png-to-webp.mjs <in.png> [maxWidth]");
+  console.error("Usage: node png-to-webp.mjs <in.png> [maxWidth]");
   process.exit(1);
 }
 const maxW = Number(maxWArg || 1400);
 
-/* ---------- PNG 解码 ---------- */
+/* Seeded mulberry32 pseudorandom generator. */
 function decodePNG(buf) {
   let pos = 8, w = 0, h = 0, bitDepth = 0, colorType = 0;
   const idat = [];
@@ -40,7 +26,7 @@ function decodePNG(buf) {
     pos += 12 + len;
   }
   if (bitDepth !== 8 || (colorType !== 2 && colorType !== 6)) {
-    throw new Error("仅支持 8-bit RGB/RGBA PNG，当前 bitDepth=" + bitDepth + " colorType=" + colorType);
+    throw new Error("Only 8-bit RGB/RGBA PNG is supported; current bitDepth=" + bitDepth + " colorType=" + colorType);
   }
   const bpp = colorType === 6 ? 4 : 3;
   const raw = inflateSync(Buffer.concat(idat));
@@ -68,7 +54,7 @@ function decodePNG(buf) {
   return { w, h, bpp, data: img };
 }
 
-/* ---------- 最近邻缩放 ---------- */
+/* Ultrasonic signal: 400 samples at 0.025 µs, 5 MHz Gaussian-windowed echoes. Intact, impact, perforation, and repaired states differ in additional echoes and back-wall attenuation. */
 function resize(img, maxWidth) {
   if (img.w <= maxWidth) return img;
   const scale = maxWidth / img.w;
@@ -84,7 +70,7 @@ function resize(img, maxWidth) {
   return { w: nw, h: nh, bpp: img.bpp, data: out };
 }
 
-/* ---------- PNG 编码（filter 0 + zlib） ---------- */
+/* Hilbert envelope from the FFT analytic signal, smoothed over five samples. */
 function crc32(buf) {
   let c, table = crc32.t;
   if (!table) {
@@ -121,12 +107,12 @@ function encodePNG(img) {
   return Buffer.concat([sig, chunk("IHDR", ihdr), chunk("IDAT", idat), chunk("IEND", Buffer.alloc(0))]);
 }
 
-/* ---------- 执行 ---------- */
+/* Six scan points traverse each damage state. */
 const src = readFileSync(inPath);
 const img = resize(decodePNG(src), maxW);
 const out = encodePNG(img);
 const outPath = inPath.replace(/\.png$/i, "") + ".optimized.png";
 writeFileSync(outPath, out);
-console.log(`输入: ${(src.length / 1024).toFixed(0)} KB (${decodePNG(src).w}×${decodePNG(src).h})`);
-console.log(`输出: ${(out.length / 1024).toFixed(0)} KB (${img.w}×${img.h}) → ${outPath}`);
-console.log("提示: 生产环境建议运行 `cwebp input.png -q 82 -o output.webp` 以获得更优 WebP 体积。");
+console.log(`Input: ${(src.length / 1024).toFixed(0)} KB (${decodePNG(src).w}×${decodePNG(src).h})`);
+console.log(`Output: ${(out.length / 1024).toFixed(0)} KB (${img.w}×${img.h}) → ${outPath}`);
+console.log("Tip: use cwebp input.png -q 82 -o output.webp for production compression.");

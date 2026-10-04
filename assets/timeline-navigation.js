@@ -6,7 +6,7 @@
  * When rebuilding from source, implement the same offset in TimelineDock.tsx
  * and remove this adapter, or update the import to the new generated module.
  */
-import { i as timeline, r as stages } from './publicAsset-DgTuthEm.js';
+import { i as timeline, r as stages } from './publicAsset-en-20261004.js';
 
 document.addEventListener('click', event => {
   const button = event.target instanceof Element ? event.target.closest('.stage-labels button') : null;

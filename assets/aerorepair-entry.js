@@ -12,7 +12,7 @@
     link.href = moduleHref;
     link.className = className;
     link.dataset.aerorepairEntry = "true";
-    link.setAttribute("aria-label", "打开 AeroRepair Scan 原位近场评估模块");
+    link.setAttribute("aria-label", "Open AeroRepair Scan");
     link.innerHTML = `${icon()}<span>${label}</span>`;
     return link;
   }

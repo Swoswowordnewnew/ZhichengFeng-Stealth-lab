@@ -1,8 +1,4 @@
-/* ============================================================
-   AI Stealth Lab · Module 10 · Damage Detection & Repair Workflow
-   视觉语言与 aerorepair-scan 模块保持一致：
-   深青灰底、青色强调、Georgia 衬线标题、工程感细线框。
-   ============================================================ */
+/* Shared teal theme, serif headings, and fine borders. */
 :root {
   color-scheme: dark;
   --bg: #07171c;
@@ -33,7 +29,7 @@ canvas { display: block; width: 100%; }
 .skip-link { position: fixed; z-index: 999; top: 8px; left: 8px; padding: 10px 14px; color: #061519; background: var(--cyan-bright); transform: translateY(-140%); }
 .skip-link:focus { transform: translateY(0); }
 
-/* ---------- 顶栏 ---------- */
+/* Module header */
 .labbar {
   position: sticky; z-index: 50; top: 0;
   min-height: 66px;
@@ -66,7 +62,7 @@ canvas { display: block; width: 100%; }
 .data-status { white-space: nowrap; color: #bcd1d5; font-size: 9px; letter-spacing: .1em; }
 .data-status i { display: inline-block; width: 6px; height: 6px; margin-right: 7px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 10px var(--orange); }
 
-/* ---------- 主流程条 ---------- */
+/* Workflow bar */
 .flowbar {
   position: sticky; z-index: 40; top: 66px;
   border-bottom: 1px solid var(--line);
@@ -115,7 +111,7 @@ canvas { display: block; width: 100%; }
 .flow-start:hover { background: rgba(110, 68, 30, 0.5); border-color: var(--orange); }
 .flow-start.running { opacity: .55; cursor: wait; }
 
-/* ---------- 页面标题区 ---------- */
+/* Page introduction */
 main { max-width: 1500px; margin: 0 auto; padding: 0 clamp(14px, 3vw, 52px) 60px; }
 .page-head { padding: 54px 0 22px; border-bottom: 1px solid var(--line); }
 .eyebrow, .section-kicker { margin: 0 0 18px; color: var(--cyan); letter-spacing: .18em; font-size: 11px; font-weight: 700; }
@@ -135,7 +131,7 @@ main { max-width: 1500px; margin: 0 auto; padding: 0 clamp(14px, 3vw, 52px) 60px
 }
 .page-state b { color: var(--cyan-bright); font-weight: 600; }
 
-/* ---------- 诚信提示 ---------- */
+/* Data scope note */
 .integrity-note {
   margin: 22px 0 0; padding: 14px 18px;
   display: flex; align-items: center; gap: 14px;
@@ -146,7 +142,7 @@ main { max-width: 1500px; margin: 0 auto; padding: 0 clamp(14px, 3vw, 52px) 60px
 .integrity-note p { margin: 3px 0 0; font-size: 11px; color: var(--muted); }
 .integrity-code { margin-left: auto; font-size: 10px; letter-spacing: .12em; color: var(--dim); white-space: nowrap; }
 
-/* ---------- 模块通用 ---------- */
+/* Shared module styles */
 .module { padding: 58px 0 12px; border-bottom: 1px solid var(--line); }
 .module:last-of-type { border-bottom: none; }
 .module-head {
@@ -175,11 +171,11 @@ main { max-width: 1500px; margin: 0 auto; padding: 0 clamp(14px, 3vw, 52px) 60px
 }
 .compare-tag b { color: var(--cyan-bright); margin-right: 12px; }
 
-/* 布局 */
+/* Layout */
 .two-col { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 22px; }
 .three-col { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 
-/* 面板 */
+/* Panels */
 .panel, .viewer-panel, .side-panel {
   border: 1px solid var(--line); background: var(--panel);
   border-radius: 2px;
@@ -228,7 +224,7 @@ main { max-width: 1500px; margin: 0 auto; padding: 0 clamp(14px, 3vw, 52px) 60px
 .lg-patch { background: #86c2ad; border-color: var(--cyan); }
 .note-small { margin: 0; font-size: 11px; line-height: 1.8; color: var(--muted); }
 
-/* 控件 */
+/* Controls */
 .ctrl-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .ctrl-row.wrap { gap: 6px; }
 .ctl {
@@ -255,10 +251,10 @@ main { max-width: 1500px; margin: 0 auto; padding: 0 clamp(14px, 3vw, 52px) 60px
 }
 .next-btn:hover { background: rgba(43, 123, 134, .5); transform: translateY(-1px); }
 
-/* SVG 示意图通用 */
+/* SVG diagrams */
 #us-scan-svg, #em-scan-svg { width: 100%; height: auto; background: var(--bg-soft); border: 1px solid var(--line); }
 
-/* 识别结果 */
+/* Assessment results */
 .verdict { display: flex; align-items: baseline; gap: 12px; padding: 12px 14px; border: 1px solid var(--line); background: var(--bg-soft); }
 .verdict-label { font-size: 12px; color: var(--muted); letter-spacing: .1em; }
 .verdict b { font-family: Georgia, serif; font-size: 22px; color: var(--cyan-bright); }
@@ -277,7 +273,7 @@ main { max-width: 1500px; margin: 0 auto; padding: 0 clamp(14px, 3vw, 52px) 60px
 .point-track .pt.current { border-color: var(--cyan-bright); transform: scaleY(1.6); }
 .axis-note { font-size: 11px; color: var(--muted); letter-spacing: .04em; }
 
-/* 近远场流程 */
+/* Near-to-far-field workflow */
 .ntff { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0; }
 .ntff li {
   position: relative; padding: 9px 12px 9px 34px;
@@ -301,13 +297,13 @@ main { max-width: 1500px; margin: 0 auto; padding: 0 clamp(14px, 3vw, 52px) 60px
 .mini-map-label { font-size: 12px; color: var(--muted); letter-spacing: .05em; }
 #em-map-canvas { border: 1px solid var(--line); background: var(--bg-soft); }
 
-/* 修复参考图 */
+/* Repair reference */
 .repair-ref { margin: 0; padding: 12px 16px; border-top: 1px solid var(--line); background: rgba(10, 32, 39, .5); }
-/* 参考图保持原始样式（白底示意图原样展示，不做混合处理） */
+/* Display the reference image without blending. */
 .repair-ref img { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 4px; opacity: .92; }
 .repair-ref figcaption { margin-top: 8px; font-size: 11px; color: var(--muted); letter-spacing: .04em; }
 
-/* 修复步骤 */
+/* Repair steps */
 .repair-steps { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
 .repair-steps li {
   padding: 10px 12px; border: 1px solid var(--line); background: rgba(10, 32, 39, .5);
@@ -325,7 +321,7 @@ main { max-width: 1500px; margin: 0 auto; padding: 0 clamp(14px, 3vw, 52px) 60px
 .closed-loop p { margin: 0 0 10px; font-size: 13px; color: #c9ecd6; }
 .closed-loop .next-btn { display: block; width: 100%; border-color: rgba(130, 210, 160, .5); background: rgba(38, 90, 62, .4); color: #c9ecd6; }
 
-/* 页脚 */
+/* Footer */
 .page-foot {
   margin-top: 54px; padding-top: 22px; border-top: 1px solid var(--line);
   display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap;
@@ -334,7 +330,7 @@ main { max-width: 1500px; margin: 0 auto; padding: 0 clamp(14px, 3vw, 52px) 60px
 .page-foot a { color: var(--cyan); }
 .page-foot a:hover { color: var(--cyan-bright); }
 
-/* ---------- 响应式：1366×768 适配 ---------- */
+/* Responsive layout */
 @media (max-width: 1420px) {
   .three-holder { height: 330px; }
   .module-head h2 { font-size: clamp(24px, 2.6vw, 36px); }

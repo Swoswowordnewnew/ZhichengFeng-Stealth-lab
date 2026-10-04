@@ -6,12 +6,12 @@
   const lerp = (a, b, t) => a + (b - a) * t;
 
   const fallbackCases = [
-    { display_name: "完好基准", id: "intact_baseline", description: "平滑参考背景，不形成集中异常区。", base_severity: .03, damage_likelihood: .02, rcs_base: .02, confidence_base: .78, polarization_gain: { 水平: 1, 垂直: .96 }, distance_decay_mm: 72, frequency_profile: { mode: "flat", slope: .02, ripple_strength: .01 }, anomaly: { shape: "none", center: [0, 0], sigma: [.22, .16], amplitude: 0, edge_strength: 0, orientation_deg: 0 }, suggested_action: "作为概念参考状态，不形成工程判定。" },
-    { display_name: "理想修复", id: "ideal_repair", description: "修补区与参考状态差异较小，用于演示低异常趋势。", base_severity: .10, damage_likelihood: .06, rcs_base: .16, confidence_base: .76, polarization_gain: { 水平: 1, 垂直: .92 }, distance_decay_mm: 68, frequency_profile: { mode: "gentle_high_frequency", slope: .08, ripple_strength: .03 }, anomaly: { shape: "ellipse", center: [.02, -.01], sigma: [.25, .17], amplitude: .12, edge_strength: .05, orientation_deg: -6 }, suggested_action: "记录当前状态，并与参考状态复核。" },
-    { display_name: "表面台阶偏大", id: "surface_step", description: "修补边缘出现环带型散射增强。", base_severity: .72, damage_likelihood: .28, rcs_base: 1.42, confidence_base: .72, polarization_gain: { 水平: 1.12, 垂直: .88 }, distance_decay_mm: 58, frequency_profile: { mode: "high_frequency_emphasis", slope: .62, ripple_strength: .08 }, anomaly: { shape: "elliptic_ring", center: [0, 0], sigma: [.43, .29], amplitude: .82, edge_strength: .92, orientation_deg: 2 }, suggested_action: "局部复扫并检查修补边缘。" },
-    { display_name: "胶层厚度异常", id: "adhesive_thickness", description: "具有频率敏感性的条带—椭圆复合异常。", base_severity: .48, damage_likelihood: .62, rcs_base: .76, confidence_base: .66, polarization_gain: { 水平: .94, 垂直: 1.08 }, distance_decay_mm: 62, frequency_profile: { mode: "resonant", ripple_strength: .28, resonance_ghz: 12.4, resonance_width_ghz: 3.2 }, anomaly: { shape: "gaussian_band", center: [-.08, .03], sigma: [.34, .10], amplitude: .56, edge_strength: .26, orientation_deg: 12 }, suggested_action: "关注敏感频段，并结合工艺记录复核。" },
-    { display_name: "面板脱粘", id: "panel_disbond", description: "局部双峰幅相异常，展示集中内部异常趋势。", base_severity: .67, damage_likelihood: .84, rcs_base: 1.04, confidence_base: .70, polarization_gain: { 水平: 1.04, 垂直: 1.12 }, distance_decay_mm: 60, frequency_profile: { mode: "broadband_with_phase", ripple_strength: .16, resonance_ghz: 9.2, resonance_width_ghz: 4.6 }, anomaly: { shape: "double_gaussian", center: [.12, .04], sigma: [.20, .15], amplitude: .76, edge_strength: .42, orientation_deg: -18 }, suggested_action: "标记异常区，并安排局部超声复核。" },
-    { display_name: "蜂窝芯压溃", id: "honeycomb_crush", description: "较宽的低—中频增强异常，展示扩展响应趋势。", base_severity: .61, damage_likelihood: .79, rcs_base: .90, confidence_base: .68, polarization_gain: { 水平: 1.08, 垂直: .98 }, distance_decay_mm: 66, frequency_profile: { mode: "low_mid_frequency_emphasis", ripple_strength: .12, resonance_ghz: 6.8, resonance_width_ghz: 4 }, anomaly: { shape: "broad_ellipse", center: [-.03, -.02], sigma: [.42, .25], amplitude: .69, edge_strength: .20, orientation_deg: 8 }, suggested_action: "扩大复扫范围，并安排局部超声复核。" }
+    { display_name: "Intact baseline", id: "intact_baseline", description: "A smooth reference with no concentrated anomaly.", base_severity: .03, damage_likelihood: .02, rcs_base: .02, confidence_base: .78, polarization_gain: { Horizontal: 1, Vertical: .96 }, distance_decay_mm: 72, frequency_profile: { mode: "flat", slope: .02, ripple_strength: .01 }, anomaly: { shape: "none", center: [0, 0], sigma: [.22, .16], amplitude: 0, edge_strength: 0, orientation_deg: 0 }, suggested_action: "Use as a reference, not an engineering verdict." },
+    { display_name: "Ideal repair", id: "ideal_repair", description: "A small deviation from the reference illustrates a low-anomaly repair.", base_severity: .10, damage_likelihood: .06, rcs_base: .16, confidence_base: .76, polarization_gain: { Horizontal: 1, Vertical: .92 }, distance_decay_mm: 68, frequency_profile: { mode: "gentle_high_frequency", slope: .08, ripple_strength: .03 }, anomaly: { shape: "ellipse", center: [.02, -.01], sigma: [.25, .17], amplitude: .12, edge_strength: .05, orientation_deg: -6 }, suggested_action: "Record the result and compare it with the reference." },
+    { display_name: "Excessive surface step", id: "surface_step", description: "Enhanced scattering forms a ring around the repair edge.", base_severity: .72, damage_likelihood: .28, rcs_base: 1.42, confidence_base: .72, polarization_gain: { Horizontal: 1.12, Vertical: .88 }, distance_decay_mm: 58, frequency_profile: { mode: "high_frequency_emphasis", slope: .62, ripple_strength: .08 }, anomaly: { shape: "elliptic_ring", center: [0, 0], sigma: [.43, .29], amplitude: .82, edge_strength: .92, orientation_deg: 2 }, suggested_action: "Rescan locally and inspect the repair edge." },
+    { display_name: "Abnormal adhesive thickness", id: "adhesive_thickness", description: "A frequency-sensitive anomaly combines a band and an ellipse.", base_severity: .48, damage_likelihood: .62, rcs_base: .76, confidence_base: .66, polarization_gain: { Horizontal: .94, Vertical: 1.08 }, distance_decay_mm: 62, frequency_profile: { mode: "resonant", ripple_strength: .28, resonance_ghz: 12.4, resonance_width_ghz: 3.2 }, anomaly: { shape: "gaussian_band", center: [-.08, .03], sigma: [.34, .10], amplitude: .56, edge_strength: .26, orientation_deg: 12 }, suggested_action: "Review sensitive frequencies and the repair records." },
+    { display_name: "Facesheet disbond", id: "panel_disbond", description: "Two localized amplitude and phase peaks suggest an internal anomaly.", base_severity: .67, damage_likelihood: .84, rcs_base: 1.04, confidence_base: .70, polarization_gain: { Horizontal: 1.04, Vertical: 1.12 }, distance_decay_mm: 60, frequency_profile: { mode: "broadband_with_phase", ripple_strength: .16, resonance_ghz: 9.2, resonance_width_ghz: 4.6 }, anomaly: { shape: "double_gaussian", center: [.12, .04], sigma: [.20, .15], amplitude: .76, edge_strength: .42, orientation_deg: -18 }, suggested_action: "Mark the anomaly and arrange local ultrasonic inspection." },
+    { display_name: "Crushed honeycomb core", id: "honeycomb_crush", description: "A broad low-to-mid-frequency anomaly illustrates an extended response.", base_severity: .61, damage_likelihood: .79, rcs_base: .90, confidence_base: .68, polarization_gain: { Horizontal: 1.08, Vertical: .98 }, distance_decay_mm: 66, frequency_profile: { mode: "low_mid_frequency_emphasis", ripple_strength: .12, resonance_ghz: 6.8, resonance_width_ghz: 4 }, anomaly: { shape: "broad_ellipse", center: [-.03, -.02], sigma: [.42, .25], amplitude: .69, edge_strength: .20, orientation_deg: 8 }, suggested_action: "Expand the scan area and arrange local ultrasonic inspection." }
   ];
 
   const palette = [
@@ -107,7 +107,7 @@
   function locationLabel(center) {
     const x = Number(center?.[0] || 0);
     const y = Number(center?.[1] || 0);
-    return `扫描域${x < -.12 ? "左侧" : x > .12 ? "右侧" : "中央"} · ${y > .07 ? "上侧" : y < -.07 ? "下侧" : "中线"}`;
+    return `Scan area${x < -.12 ? "Left" : x > .12 ? "Right" : "Center"} · ${y > .07 ? "Upper" : y < -.07 ? "Lower" : "Centerline"}`;
   }
 
   function computeResult(item, frequency, polarization, distance) {
@@ -124,9 +124,9 @@
     const hasAnomaly = item.anomaly?.shape !== "none";
     const sigma = item.anomaly?.sigma || [.2, .15];
     const area = hasAnomaly ? clamp(4 + 38 * Number(sigma[0]) * Number(sigma[1]) / (.46 * .31) * Math.min(frequencyGainValue, 1.2) * spread, 2, 42) : 0;
-    const location = hasAnomaly ? locationLabel(item.anomaly.center) : "未形成集中异常区";
-    const risk = rcs < .35 ? "低" : rcs < .9 ? "中" : "高";
-    const evaluation = nf < 18 && damage < 24 ? "差异较低" : nf < 48 && damage < 68 ? "建议复查" : "高风险提示";
+    const location = hasAnomaly ? locationLabel(item.anomaly.center) : "No concentrated anomaly";
+    const risk = rcs < .35 ? "Low" : rcs < .9 ? "Medium" : "High";
+    const evaluation = nf < 18 && damage < 24 ? "Low deviation" : nf < 48 && damage < 68 ? "Review recommended" : "High-risk indication";
     return { item, frequency, polarization, distance, frequencyGain: frequencyGainValue, polarizationGain, distanceGain, spread, nf, damage, rcs, confidence, area, location, risk, evaluation };
   }
 
@@ -208,32 +208,32 @@
     ctx.save();
     ctx.translate(14, plot.y + plot.height / 2 + 35);
     ctx.rotate(-Math.PI / 2);
-    ctx.fillText("横向 y（归一化）", 0, 0);
+    ctx.fillText("Transverse y (normalized)", 0, 0);
     ctx.restore();
-    ctx.fillText("扫描方向 x（归一化）", plot.x + plot.width / 2 - 48, height - 10);
+    ctx.fillText("Scan direction x (normalized)", plot.x + plot.width / 2 - 48, height - 10);
   }
 
   function updateMetrics(result, scanning = false) {
     const fields = [els.nf, els.area, els.damage, els.rcs, els.evaluation, els.confidence];
     if (scanning) {
-      fields.forEach((field) => { field.textContent = "计算中"; field.classList.remove("risk-high"); });
-      els.location.textContent = "复数场重建中";
-      els.risk.textContent = "相干融合中";
+      fields.forEach((field) => { field.textContent = "Computing"; field.classList.remove("risk-high"); });
+      els.location.textContent = "Reconstructing complex fields";
+      els.risk.textContent = "Combining coherent responses";
       return;
     }
     els.nf.textContent = `${result.nf.toFixed(1)}%`;
     els.area.textContent = `${result.area.toFixed(1)}%`;
-    els.location.textContent = `${result.location} · 模拟`;
+    els.location.textContent = `${result.location} · simulated`;
     els.damage.textContent = `${result.damage.toFixed(1)}%`;
     els.rcs.textContent = `+${result.rcs.toFixed(2)} dB`;
-    els.risk.textContent = `${result.risk}风险 · simulated dB`;
+    els.risk.textContent = `${result.risk}risk · simulated dB`;
     els.evaluation.textContent = result.evaluation;
     els.confidence.textContent = `${result.confidence.toFixed(1)}%`;
-    els.rcs.classList.toggle("risk-high", result.risk === "高");
-    els.evaluation.classList.toggle("risk-high", result.evaluation === "高风险提示");
-    els.summaryTitle.textContent = `概念评估摘要 · ${result.item.display_name}`;
-    els.summaryText.textContent = `${result.frequency.toFixed(1)} GHz、${result.polarization}极化、离表 ${Math.round(result.distance)} mm。近场差异 ${result.nf.toFixed(1)}%，异常区域约 ${result.area.toFixed(1)}%，内部损伤趋势 ${result.damage.toFixed(1)}%，最大潜在增量 +${result.rcs.toFixed(2)} simulated dB。`;
-    els.summaryAction.textContent = `后续建议：${result.item.suggested_action || "结合参考状态复核。"} 对需要精确几何定量的内部缺陷，应使用经过验证的超声等方法复核。`;
+    els.rcs.classList.toggle("risk-high", result.risk === "High");
+    els.evaluation.classList.toggle("risk-high", result.evaluation === "High-risk indication");
+    els.summaryTitle.textContent = `Concept assessment · ${result.item.display_name}`;
+    els.summaryText.textContent = `${result.frequency.toFixed(1)} GHz、${result.polarization} polarization, standoff ${Math.round(result.distance)} mm. Near-field deviation ${result.nf.toFixed(1)}%, estimated anomaly area ${result.area.toFixed(1)}%, internal damage indication ${result.damage.toFixed(1)}%, maximum potential increase +${result.rcs.toFixed(2)} simulated dB。`;
+    els.summaryAction.textContent = `Next step: ${result.item.suggested_action || "Compare with the reference state."} Use validated methods such as ultrasound to quantify internal defects.`;
   }
 
   function readInputs() {
@@ -265,7 +265,7 @@
     button.disabled = true;
     document.querySelector(".scan-workspace").setAttribute("aria-busy", "true");
     document.querySelector(".metrics").setAttribute("aria-busy", "true");
-    els.state.textContent = "多频相干近场扫描与重建中";
+    els.state.textContent = "Scanning and reconstructing coherent near fields";
     const start = performance.now();
     const duration = reducedMotion.matches ? 1 : 1350;
     updateMetrics(readInputs(), true);
@@ -276,7 +276,7 @@
       if (progress < 1) animationFrame = requestAnimationFrame(tick);
       else {
         stopScan();
-        els.state.textContent = "扫描完成，已生成概念结果";
+        els.state.textContent = "Scan complete · concept results ready";
         render(1, false);
       }
     }
@@ -291,16 +291,16 @@
       option.textContent = item.display_name;
       els.scene.append(option);
     });
-    els.scene.value = caseMap.has("理想修复") ? "理想修复" : cases[0].display_name;
+    els.scene.value = caseMap.has("Ideal repair") ? "Ideal repair" : cases[0].display_name;
   }
 
   function reset() {
     stopScan();
-    els.scene.value = caseMap.has("理想修复") ? "理想修复" : cases[0].display_name;
+    els.scene.value = caseMap.has("Ideal repair") ? "Ideal repair" : cases[0].display_name;
     els.frequency.value = "10";
     els.distance.value = "50";
-    els.form.elements.polarization.value = "水平";
-    els.state.textContent = "扫描就绪";
+    els.form.elements.polarization.value = "Horizontal";
+    els.state.textContent = "Ready to scan";
     render(1, false);
   }
 
@@ -321,7 +321,7 @@
   els.form.addEventListener("submit", scan);
   els.form.addEventListener("input", () => {
     stopScan();
-    els.state.textContent = "参数已更新 · 合成结果预览";
+    els.state.textContent = "Parameters updated · synthetic preview";
     render(1, false);
   });
   els.reset.addEventListener("click", reset);

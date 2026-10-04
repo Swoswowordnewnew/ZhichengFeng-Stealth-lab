@@ -1,64 +1,69 @@
-# 静态网站维护说明
+# Maintaining the static website
 
-## 发布物与源工程
+## Distribution and source
 
-这个仓库存放 GitHub Pages 发布目录。主应用的 `index.html`、`demo/index.html` 和带哈希名称的 `assets/` 文件由源工程构建生成；这里没有 `package.json`，不能在本仓库直接运行 `npm run build`。
+This repository is the GitHub Pages distribution. The main HTML and application bundles were built from a separate source project; there is no `package.json` here. The `aerorepair-scan/` and `repair-workflow/` modules can be maintained directly.
 
-`aerorepair-scan/` 与 `repair-workflow/` 是可以直接维护的原生静态模块。它们通过 `assets/aerorepair-entry.js` 和 `assets/repair-workflow-entry.js` 挂接到主应用，两个入口脚本应随发布保留。
+The readable publishing layer includes:
 
-主实验室另有可直接阅读和维护的发布层文件，同时由首页与演示入口加载：
-
-| 文件 | 职责 |
+| File | Purpose |
 | --- | --- |
-| `assets/site-polish.css` | 首页布局、工作台卡片、控件可读性、焦点样式和响应式适配 |
-| `assets/site-enhancements.js` | 客户端初始化后的概念图、模块入口、导航辅助标签和跳转到主要内容 |
-| `assets/site-mobile-workspace.css` | 手机和平板实验面板的自然滚动布局，以及时间轴定位 |
-| `assets/timeline-navigation.js` | 使用原有时间轴与阶段数据，修正阶段跳转的时间舍入误差 |
-| `assets/site-theme.css` | 四个页面入口共用的底色、顶栏和卡片配色；须在其他样式之后加载 |
+| `assets/site-polish.css` | Homepage, controls, focus styles, and responsive layout |
+| `assets/site-enhancements.js` | Concept image, module cards, labels, and skip navigation |
+| `assets/site-mobile-workspace.css` | Scrolling panels and timeline layout on small screens |
+| `assets/timeline-navigation.js` | Stage selection with a 1 ms offset to avoid timeline rounding |
+| `assets/site-theme.css` | Shared page, header, and panel colors across all four entries |
 
-页面底色统一为 `#122d36`，顶栏为 `#15313a`，卡片为 `#1a3943`。调整整体明暗时优先修改 `site-theme.css` 中的共享变量，并同步四个入口的 `theme-color`；主应用的序列化 RSC 元数据也包含该颜色。绘图区域、色标及三维模型的科学内容配色独立保留。
+The shared page background is `#122d36`, the header is `#15313a`, and panels use `#1a3943`. Load the shared theme after other styles. Update the four `theme-color` tags and serialized RSC metadata when changing the page color. Scientific rendering colors remain independent.
 
-这层增强复用现有图像和交互入口，不改写科学数据。重新生成主应用时，应重新接入这些文件，并检查它们依赖的页面类名和交互入口是否仍然匹配。时间轴适配脚本导入了带哈希名称的模块：重新构建时须更新其导入，或在源工程 `TimelineDock.tsx` 中把阶段跳转目标设为阶段起点之后 1 毫秒，再移除此适配脚本。`site-mobile-workspace.css` 应在 `site-polish.css` 之后加载。README 的桌面截图保存在 `docs/screenshots/home-desktop.png`；首页发生明显变化时同步更新。
+All public copy is in English, including static HTML, serialized metadata, client-rendered labels, chart tooltips, module data descriptions, and documentation. Keep server-rendered text and client strings consistent to avoid hydration errors. Repair data and the generator use neutral field names such as `title`, `description`, and `position`.
 
-## 选择修改位置
+Every AbsorbEvo entry is a normal anchor to `https://github.com/ZhichengFeng/AbsorbEvo`. Preserve the link in the top navigation, intro, parameter controls, project overview, and module card. Refer to that repository for the current method, benchmark, and citation.
 
-- 主实验室的科学计算、状态和场景行为：在完整源工程修改并重新构建，保留数据来源标记。
-- 主实验室的局部视觉样式：优先使用可阅读的独立样式文件。修改后检查首页和 `/demo/`，避免直接编辑压缩后的 JavaScript。
-- 扫描与修复模块：直接维护各目录中的 HTML、CSS、JavaScript；数据生成脚本和静态依赖一起保留。
-- 导航、标题和分享信息：检查所有四个入口，保证相对路径、返回主页链接以及页面描述一致。
+## Choosing where to edit
 
-## 从源工程重新构建时
+- Change scientific calculations and scene behavior in the complete source project, then rebuild.
+- Use the readable publishing layer for local visual changes. Check both the homepage and `/demo/`.
+- Maintain the native modules in their HTML, CSS, JavaScript, and JSON files.
+- Keep titles, descriptions, accessibility labels, and navigation consistent across all four entries.
 
-1. 确认源工程的修改和构建输出属于同一次发布。
-2. 以 `/ZhichengFeng-Stealth-lab/` 为公共基础路径构建。当前主应用所有绝对资源地址都使用这个项目路径。
-3. 把构建后的 HTML 与对应哈希资源作为一组更新，避免 HTML 指向不存在的 chunk。
-4. 同时保留两项原生模块、入口脚本、独立样式、数据、参考资产、README、LICENSE、维护工具和 `.nojekyll`。源工程的客户端输出未必包含后来增加的模块。
-5. 在带项目路径的本地静态服务器上完成检查，再发布。
+The English release uses versioned application asset names so returning visitors receive the translated modules. When replacing those assets, update every import and both HTML entries. The timeline adapter must continue to import the same timeline singleton used by the application.
 
-不要用另一套托管平台的根路径构建产物直接替换 GitHub Pages 发布目录。本仓库的 `_headers` 文件属于其他静态托管平台的配置格式，GitHub Pages 不读取它来设置响应头。
+## Rebuilding the main application
 
-## 发布前检查
+1. Build with `/ZhichengFeng-Stealth-lab/` as the public base path.
+2. Replace HTML and its matching application assets together.
+3. Preserve both native modules, entry scripts, publishing-layer files, local dependencies, data, provenance, documentation, and `.nojekyll`.
+4. Keep English copy and AbsorbEvo links when incorporating a new build.
+5. Refresh `docs/screenshots/home-desktop.png` after visible homepage changes.
 
-在项目父目录运行本地服务器：
+The `_headers` file is for other static hosts; GitHub Pages does not use it.
+
+## Validation and publishing
+
+Serve the parent directory with:
 
 ```powershell
 python -m http.server 3000 --bind 127.0.0.1
 ```
 
-在仓库根目录运行：
+Run the read-only checker from the repository root:
 
 ```powershell
 python tools/check_site.py
 ```
 
-检查脚本仅使用 Python 3.10+ 标准库，不联网、不改写文件；验证页面中的本地链接与资源、CSS 引用、可静态识别的 JavaScript 相对文件路径，以及 manifest 中的资源路径、大小和 SHA-256。JSON / CSV 按 Git 发布文件的 LF 换行校验，兼容 Windows 的 `core.autocrlf` 工作区转换。它不执行 JavaScript、不验证外部链接，也不代替科学数据审核。
+The checker uses Python 3.10+ standard libraries. It validates local page and asset references, CSS URLs, literal JavaScript paths, and manifest sizes and SHA-256 values. JSON and CSV checks normalize CRLF to LF to match Git's published blobs. It does not execute scripts or validate external URLs.
 
-随后在浏览器验证：
+In a browser, verify:
 
-- 首页、演示、AeroRepair Scan 和 Repair Workflow 均可打开，返回主页正常。
-- 自动演示、自由探索、结构/极化切换、图表和修复模块的播放/重置可用。
-- 桌面与手机视口无横向溢出；关键操作没有被遮挡，键盘焦点清晰。
-- 页面无关键资源 404、JavaScript 异常或 WebGL 初始化失败。
-- 合成案例和独立 CST 参考的来源说明与实际显示数据相符。
+- All four entries load and return links work.
+- Every AbsorbEvo entry reaches the independent project page.
+- Demo playback, stage selection, structure and polarization controls, and charts work.
+- Scan reset, repair state selection, play/pause, and the guided tour work.
+- English labels fit desktop and mobile layouts, with no horizontal overflow.
+- Visible copy, accessibility labels, notifications, and metadata are English.
+- No missing resources, script exceptions, or WebGL initialization failures occur.
+- Synthetic data and the independent CST reference remain clearly labeled.
 
-推送后检查 GitHub Pages 部署结果，再以公开网址复核。Git 提交成功只表示代码已经更新，不代表部署已经完成。
+After pushing, verify the GitHub Pages deployment and the live website. A successful Git push alone does not confirm deployment.

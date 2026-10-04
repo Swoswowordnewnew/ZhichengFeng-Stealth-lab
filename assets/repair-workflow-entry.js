@@ -1,5 +1,5 @@
-/* AI Stealth Lab · Module 10 入口注入：损伤检测与修复工作流
-   仿照 aerorepair-entry.js：在顶栏与首页操作区追加入口链接。 */
+/* AI Stealth Lab · Module 10 entry links.
+   Add navigation after hydration, following the AeroRepair entry pattern. */
 (() => {
   "use strict";
   const repoBase = "/ZhichengFeng-Stealth-lab/";
@@ -14,7 +14,7 @@
     link.href = moduleHref;
     link.className = className;
     link.dataset.repairWorkflowEntry = "true";
-    link.setAttribute("aria-label", "打开损伤检测与修复工作流模块");
+    link.setAttribute("aria-label", "Open Damage Detection and Repair");
     link.innerHTML = `${icon()}<span>${label}</span>`;
     return link;
   }
@@ -22,11 +22,11 @@
   function inject() {
     const nav = document.querySelector(".top-actions");
     if (nav && !nav.querySelector("[data-repair-workflow-entry]")) {
-      nav.append(createLink("repairworkflow-nav", "修复工作流"));
+      nav.append(createLink("repairworkflow-nav", "Repair Workflow"));
     }
     const actions = document.querySelector(".intro-actions");
     if (actions && !actions.querySelector("[data-repair-workflow-entry]")) {
-      actions.append(createLink("repairworkflow-intro-action", "损伤检测与修复"));
+      actions.append(createLink("repairworkflow-intro-action", "Damage Detection and Repair"));
     }
   }
 
